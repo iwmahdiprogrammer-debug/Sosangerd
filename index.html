@@ -2,22 +2,59 @@
 <html lang="fa">
 <head>
 <meta charset="UTF-8">
-<title>مهدی مرمزی </title>
+<title>مهدی مرمزی</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
 <style>
   body {
     background: #0f0f0f;
     font-family: 'Segoe UI', sans-serif;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    margin: 0;
+    padding: 0;
     color: #fff;
   }
 
+  /* صفحه امنیتی */
+  #security-screen {
+    position: fixed;
+    inset: 0;
+    background: #0f0f0f;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  #security-screen input {
+    padding: 12px;
+    width: 70%;
+    max-width: 300px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    text-align: center;
+  }
+
+  #security-screen button {
+    background: #4ea8ff;
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  #security-screen button:hover {
+    background: #1f7edb;
+  }
+
+  /* پلیر */
   .mahdi-player {
-    width: 90%;
+    width: 95%;
     max-width: 900px;
+    margin: 40px auto;
     background: rgba(255,255,255,0.08);
     backdrop-filter: blur(20px);
     border-radius: 20px;
@@ -30,7 +67,6 @@
     font-weight: bold;
     margin-bottom: 10px;
     text-align: center;
-    letter-spacing: 1px;
     color: #4ea8ff;
   }
 
@@ -43,8 +79,10 @@
   .controls {
     margin-top: 15px;
     display: flex;
+    flex-wrap: wrap;
     gap: 12px;
     align-items: center;
+    justify-content: center;
   }
 
   .btn {
@@ -63,6 +101,7 @@
 
   .slider {
     flex: 1;
+    min-width: 150px;
     accent-color: #4ea8ff;
   }
 
@@ -81,41 +120,68 @@
     color: #fff;
     border: none;
     cursor: pointer;
-    transition: 0.2s;
   }
 
   .download-btn:hover {
     background: #15803d;
+  }
+
+  @media (max-width: 600px) {
+    .btn, .download-btn, .speed {
+      width: 100%;
+      text-align: center;
+    }
   }
 </style>
 </head>
 
 <body>
 
-<div class="mahdi-player">
-  <div class="mahdi-header">مهدی</div>
+<!-- صفحه امنیتی -->
+<div id="security-screen">
+  <h2>ورود به MahdiPlayer</h2>
+  <p>سؤال امنیتی: اسم صاحب این پلیر چیه؟</p>
+  <input id="security-answer" placeholder="پاسخ را وارد کن">
+  <button onclick="checkSecurity()">ورود</button>
+  <p id="error" style="color:red; display:none;">پاسخ اشتباهه!</p>
+</div>
 
-  <!-- آدرس ویدیو را اینجا تغییر بده -->
-  <video id="video" src="InShot_20260710_153629179.mp4"></video>
+<!-- پلیر -->
+<div class="mahdi-player" id="player" style="display:none;">
+  <div class="mahdi-header">مهدی </div>
+
+  <video id="video" src="video.mp4"></video>
 
   <div class="controls">
     <button class="btn" id="playPause">▶ Play</button>
     <input type="range" id="seek" class="slider" min="0" max="100" value="0">
     <input type="range" id="volume" class="slider" min="0" max="1" step="0.05" value="1">
+
     <select id="speed" class="speed">
       <option value="0.5">0.5x</option>
       <option value="1" selected>1x</option>
       <option value="1.5">1.5x</option>
       <option value="2">2x</option>
     </select>
-    <button class="btn" id="fullscreen">⛶ Full</button>
 
-    <!-- دکمه دانلود -->
+    <button class="btn" id="fullscreen">⛶ Full</button>
     <button class="download-btn" id="downloadBtn">⬇ دانلود</button>
   </div>
 </div>
 
 <script>
+  // امنیت
+  function checkSecurity() {
+    const answer = document.getElementById("security-answer").value.trim();
+    if (answer === "مهدی" || answer === "Mahdi" || answer === "mahdi") {
+      document.getElementById("security-screen").style.display = "none";
+      document.getElementById("player").style.display = "block";
+    } else {
+      document.getElementById("error").style.display = "block";
+    }
+  }
+
+  // پلیر
   const video = document.getElementById('video');
   const playPauseBtn = document.getElementById('playPause');
   const seek = document.getElementById('seek');
@@ -154,11 +220,10 @@
     if (video.requestFullscreen) video.requestFullscreen();
   });
 
-  // قابلیت دانلود
   downloadBtn.addEventListener('click', () => {
     const link = document.createElement('a');
     link.href = video.src;
-    link.download = "MahdiPlayer-Video.mp4";
+    link.download = "Mahdisosangerd-Video.mp4";
     link.click();
   });
 </script>
