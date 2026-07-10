@@ -7,121 +7,102 @@
 
 <style>
   :root {
-    --bg: #050816;
-    --card: rgba(15,23,42,0.9);
     --accent: #38bdf8;
     --accent2: #a855f7;
+    --bg: #050816;
     --text: #e5e7eb;
-  }
-
-  * {
-    box-sizing: border-box;
   }
 
   body {
     margin: 0;
     min-height: 100vh;
     background: radial-gradient(circle at top, #0f172a 0, #020617 40%, #000 100%);
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    color: var(--text);
+    font-family: "Segoe UI", sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
+    color: var(--text);
   }
 
+  /* 3D Wrapper */
   .mahdi-wrapper {
     width: 100%;
-    max-width: 960px;
-    position: relative;
+    max-width: 900px;
+    perspective: 1800px;
   }
 
-  .glow-orb {
-    position: absolute;
-    width: 260px;
-    height: 260px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(56,189,248,0.35), transparent 70%);
-    filter: blur(10px);
-    top: -80px;
-    right: -40px;
-    pointer-events: none;
-  }
-
-  .glow-orb2 {
-    position: absolute;
-    width: 220px;
-    height: 220px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(168,85,247,0.35), transparent 70%);
-    filter: blur(10px);
-    bottom: -60px;
-    left: -40px;
-    pointer-events: none;
-  }
-
+  /* 3D Card */
   .mahdi-player {
-    position: relative;
-    background: linear-gradient(135deg, rgba(15,23,42,0.95), rgba(15,23,42,0.75));
+    background: rgba(15,23,42,0.85);
     border-radius: 24px;
     padding: 20px;
     box-shadow:
-      0 30px 80px rgba(0,0,0,0.9),
+      0 40px 80px rgba(0,0,0,0.9),
       0 0 0 1px rgba(148,163,184,0.25);
     backdrop-filter: blur(24px);
     border: 1px solid rgba(148,163,184,0.35);
-    overflow: hidden;
+    transform-style: preserve-3d;
+    transform: rotateY(0deg) rotateX(0deg);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
   }
 
+  /* Hover 3D Effect */
+  .mahdi-player:hover {
+    transform: rotateY(12deg) rotateX(6deg);
+    box-shadow:
+      0 60px 120px rgba(0,0,0,0.95),
+      0 0 40px rgba(56,189,248,0.4),
+      0 0 60px rgba(168,85,247,0.4);
+  }
+
+  /* Header */
   .mahdi-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 14px;
+    transform: translateZ(40px);
   }
 
   .mahdi-title {
-    font-size: 22px;
+    font-size: 26px;
     font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
     background: linear-gradient(90deg, var(--accent), var(--accent2));
     -webkit-background-clip: text;
     color: transparent;
-  }
-
-  .mahdi-tagline {
-    font-size: 12px;
-    color: #9ca3af;
+    letter-spacing: 0.08em;
   }
 
   .mahdi-badge {
-    font-size: 11px;
-    padding: 6px 10px;
+    padding: 6px 12px;
     border-radius: 999px;
     background: radial-gradient(circle at top left, rgba(56,189,248,0.4), rgba(15,23,42,0.9));
     border: 1px solid rgba(56,189,248,0.6);
-    color: #e5e7eb;
+    transform: translateZ(50px);
   }
 
+  /* 3D Video Frame */
   .mahdi-video-shell {
     position: relative;
     border-radius: 18px;
     overflow: hidden;
     background: #020617;
-    box-shadow: inset 0 0 0 1px rgba(15,23,42,0.9);
+    box-shadow:
+      inset 0 0 0 1px rgba(15,23,42,0.9),
+      0 20px 40px rgba(0,0,0,0.7);
+    transform: translateZ(60px);
   }
 
   video {
     width: 100%;
     display: block;
-    background: #000;
   }
 
-  .mahdi-overlay-top {
+  /* Neon Overlays */
+  .mahdi-overlay-top,
+  .mahdi-overlay-bottom {
     position: absolute;
-    top: 10px;
-    left: 10px;
     padding: 6px 10px;
     border-radius: 999px;
     background: rgba(15,23,42,0.85);
@@ -129,6 +110,17 @@
     display: flex;
     align-items: center;
     gap: 6px;
+    transform: translateZ(80px);
+  }
+
+  .mahdi-overlay-top {
+    top: 10px;
+    left: 10px;
+  }
+
+  .mahdi-overlay-bottom {
+    bottom: 10px;
+    right: 10px;
   }
 
   .dot {
@@ -139,44 +131,26 @@
     box-shadow: 0 0 8px #22c55e;
   }
 
-  .mahdi-overlay-bottom {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    padding: 6px 10px;
-    border-radius: 999px;
-    background: rgba(15,23,42,0.85);
-    font-size: 11px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
   .mahdi-chip {
     padding: 4px 8px;
     border-radius: 999px;
     background: rgba(56,189,248,0.15);
     border: 1px solid rgba(56,189,248,0.5);
-    font-size: 10px;
   }
 
+  /* Controls */
   .controls {
     margin-top: 16px;
-    display: grid;
-    grid-template-columns: minmax(0,1.5fr) minmax(0,1fr);
-    gap: 14px;
-  }
-
-  .controls-main {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
+    transform: translateZ(40px);
   }
 
   .controls-row {
     display: flex;
-    align-items: center;
     gap: 10px;
+    flex-wrap: wrap;
   }
 
   .btn {
@@ -186,39 +160,27 @@
     border-radius: 999px;
     cursor: pointer;
     font-size: 14px;
-    color: #0b1120;
     font-weight: 600;
+    color: #0b1120;
     box-shadow:
       0 10px 25px rgba(56,189,248,0.35),
       0 0 0 1px rgba(15,23,42,0.9);
-    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    transition: transform 0.2s ease;
   }
 
   .btn:hover {
-    transform: translateY(-1px);
-    box-shadow:
-      0 14px 30px rgba(56,189,248,0.45),
-      0 0 0 1px rgba(15,23,42,0.9);
+    transform: translateZ(20px) scale(1.05);
   }
 
   .btn-secondary {
     background: rgba(15,23,42,0.95);
     color: #e5e7eb;
-    border-radius: 999px;
     border: 1px solid rgba(148,163,184,0.6);
-    box-shadow: 0 8px 20px rgba(15,23,42,0.8);
-  }
-
-  .btn-secondary:hover {
-    box-shadow: 0 12px 26px rgba(15,23,42,0.9);
   }
 
   .download-btn {
     background: radial-gradient(circle at top left, #22c55e, #16a34a);
     color: #022c22;
-    box-shadow:
-      0 10px 25px rgba(34,197,94,0.4),
-      0 0 0 1px rgba(15,23,42,0.9);
   }
 
   .slider {
@@ -232,74 +194,15 @@
     border: 1px solid rgba(148,163,184,0.7);
     padding: 8px;
     border-radius: 999px;
-    font-size: 13px;
   }
 
-  .meta-panel {
-    background: rgba(15,23,42,0.9);
-    border-radius: 16px;
-    padding: 12px;
-    border: 1px solid rgba(31,41,55,0.9);
-    box-shadow: inset 0 0 0 1px rgba(15,23,42,0.9);
-    font-size: 12px;
-  }
-
-  .meta-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 6px;
-    color: #9ca3af;
-  }
-
-  .meta-row span:last-child {
-    color: #e5e7eb;
-  }
-
-  /* واکنش‌گرایی کامل */
-  @media (max-width: 1024px) {
-    .mahdi-wrapper {
-      max-width: 820px;
-    }
-  }
-
-  @media (max-width: 820px) {
-    body {
-      padding: 10px;
-    }
-    .mahdi-player {
-      padding: 16px;
-    }
-    .controls {
-      grid-template-columns: 1fr;
-    }
-    .controls-row {
-      flex-wrap: wrap;
-    }
+  /* Responsive */
+  @media (max-width: 600px) {
     .btn, .btn-secondary, .download-btn, .speed {
       width: 100%;
-      text-align: center;
     }
-    video {
-      border-radius: 14px;
-    }
-  }
-
-  @media (max-width: 480px) {
     .mahdi-title {
-      font-size: 18px;
-    }
-    .mahdi-tagline {
-      font-size: 10px;
-    }
-    .mahdi-player {
-      padding: 12px;
-      border-radius: 16px;
-    }
-    .controls-row {
-      gap: 8px;
-    }
-    .slider {
-      min-width: 100%;
+      font-size: 20px;
     }
     .glow-orb, .glow-orb2 {
       display: none;
@@ -311,16 +214,11 @@
 <body>
 
 <div class="mahdi-wrapper">
-  <div class="glow-orb"></div>
-  <div class="glow-orb2"></div>
-
   <div class="mahdi-player">
+
     <div class="mahdi-header">
-      <div>
-        <div class="mahdi-title">Mahdi</div>
-        <div class="mahdi-tagline">Designed for Mahdi • Ultra UI • Pro Motion</div>
-      </div>
-      <div class="mahdi-badge">Legendary</div>
+      <div class="mahdi-title">مهدي</div>
+      <div class="mahdi-badge">M</div>
     </div>
 
     <div class="mahdi-video-shell">
@@ -328,53 +226,37 @@
 
       <div class="mahdi-overlay-top">
         <div class="dot"></div>
-        <span>Live Render • Mahdi Mode</span>
+        <span>Mahdi Mode</span>
       </div>
 
       <div class="mahdi-overlay-bottom">
         <span>Resolution</span>
-        <div class="mahdi-chip">HD</div>
+        <div class="mahdi-chip"></div>
       </div>
     </div>
 
     <div class="controls">
-      <div class="controls-main">
-        <div class="controls-row">
-          <button class="btn" id="playPause">▶ Play</button>
-          <button class="btn-secondary" id="fullscreen">⛶ Fullscreen</button>
-          <button class="download-btn" id="downloadBtn">⬇ Download</button>
-        </div>
-
-        <div class="controls-row">
-          <input type="range" id="seek" class="slider" min="0" max="100" value="0">
-        </div>
-
-        <div class="controls-row">
-          <input type="range" id="volume" class="slider" min="0" max="1" step="0.05" value="1">
-          <select id="speed" class="speed">
-            <option value="0.5">0.5x</option>
-            <option value="1" selected>1x</option>
-            <option value="1.5">1.5x</option>
-            <option value="2">2x</option>
-          </select>
-        </div>
+      <div class="controls-row">
+        <button class="btn" id="playPause">▶ Play</button>
+        <button class="btn-secondary" id="fullscreen">⛶ Fullscreen</button>
+        <button class="download-btn" id="downloadBtn">⬇ Download</button>
       </div>
 
-      <div class="meta-panel">
-        <div class="meta-row">
-          <span>Owner</span>
-          <span>Mahdi</span>
-        </div>
-        <div class="meta-row">
-          <span>Mode</span>
-          <span>Special UI</span>
-        </div>
-        <div class="meta-row">
-          <span>Download</span>
-          <span>HD • Direct</span>
-        </div>
+      <div class="controls-row">
+        <input type="range" id="seek" class="slider" min="0" max="100" value="0">
+      </div>
+
+      <div class="controls-row">
+        <input type="range" id="volume" class="slider" min="0" max="1" step="0.05" value="1">
+        <select id="speed" class="speed">
+          <option value="0.5">0.5x</option>
+          <option value="1" selected>1x</option>
+          <option value="1.5">1.5x</option>
+          <option value="2">2x</option>
+        </select>
       </div>
     </div>
+
   </div>
 </div>
 
@@ -426,7 +308,7 @@
   downloadBtn.addEventListener('click', () => {
     const link = document.createElement('a');
     link.href = video.src;
-    link.download = "MahdiSosangerd.mp4";
+    link.download = "Mahdisosangerd.mp4";
     link.click();
   });
 </script>
